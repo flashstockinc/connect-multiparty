@@ -88,7 +88,11 @@ function multipart (options) {
       if (done) return;
 
       done = true;
-      err.status = 400;
+      if (err.statusCode) {
+        err.status = err.statusCode;
+      } else {
+        err.status = 400;
+      }
 
       if (!req.readable) return next(err);
 
@@ -108,7 +112,11 @@ function multipart (options) {
         req.files = qs.parse(files, { allowDots: true })
         next();
       } catch (err) {
-        err.status = 400;
+        if (err.statusCode) {
+          err.status = err.statusCode;
+        } else {
+          err.status = 400;
+        }
         next(err);
       }
     });
